@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tf.atomdb.mapper.TablesMapper">
+    <!-- 结果集 -->
+    <resultMap id="tablesResultMap" type="com.tf.atomdb.domain.Tables">
+        <result column="TABLE_SCHEMA" property="tableSchema"/>
+        <result column="TABLE_NAME" property="tableName"/>
+        <result column="TABLE_TYPE" property="tableType"/>
+        <result column="ROW_FORMAT" property="rowFormat"/>
+        <result column="TABLE_COLLATION" property="tableCollation"/>
+        <result column="TABLE_COMMENT" property="tableComment"/>
+    </resultMap>
+
+    <resultMap id="columnsResultMap" type="com.tf.atomdb.domain.Columns">
+        <result column="TABLE_SCHEMA" property="tableSchema"/>
+        <result column="TABLE_NAME" property="tableName"/>
+        <result column="COLUMN_NAME" property="columnName"/>
+        <result column="COLUMN_DEFAULT" property="columnDefault"/>
+        <result column="IS_NULLABLE" property="isNullable"/>
+        <result column="DATA_TYPE" property="dataType"/>
+        <result column="COLUMN_TYPE" property="columnType"/>
+        <result column="COLUMN_KEY" property="columnKey"/>
+        <result column="COLUMN_COMMENT" property="columnComment"/>
+        <result column="COLLATION_NAME" property="collationName"/>
+    </resultMap>
+
+    <sql id="tables_sql">
+        TABLE_SCHEMA, TABLE_NAME, COLUMN_NAME, COLUMN_DEFAULT, IS_NULLABLE, DATA_TYPE,
+        COLUMN_TYPE, COLUMN_KEY, COLUMN_COMMENT, COLLATION_NAME
+    </sql>
+
+    <sql id="columns_sql">
+        TABLE_SCHEMA, TABLE_NAME, TABLE_TYPE, ROW_FORMAT, TABLE_COLLATION, TABLE_COMMENT
+    </sql>
+
+    <select id="selectTablesBySchema" resultMap="tablesResultMap" parameterType="string">
+        select
+        <include refid="tables_sql"/>
+        from `TABLES` where TABLE_SCHEMA = #{schema,jdbcTypr=VARCHAR};
+    </select>
+
+    <select id="selectColumnsByTableName" resultMap="columnsResultMap" parameterType="string">
+        select
+        <include refid="columns_sql"/>
+        from `COLUMNS` where TABLE_NAME = #{tableName,jdbcTypr=VARCHAR};
+    </select>
+
+
+</mapper>
